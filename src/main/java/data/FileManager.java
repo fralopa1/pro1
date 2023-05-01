@@ -59,8 +59,7 @@ public class FileManager implements CSV {
         ArrayList<List<String>> items = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            line = br.readLine();
-            String[] headers = line.split(cvsSplitBy);
+            br.readLine();
 
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(cvsSplitBy);

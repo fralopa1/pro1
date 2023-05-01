@@ -82,7 +82,7 @@ public class ItemsAdapter extends AbstractTableModel {
                     zbozi.setCount(Integer.parseInt(hodnota.toString()));
                     break;
                 default:
-                    throw new IllegalArgumentException("AAAAAAAAAAAA WHAT IS GOING ON");
+                    throw new IllegalArgumentException("Nespravny sloupec tabulky skladu.");
             }
         } catch (Exception e) {
 
