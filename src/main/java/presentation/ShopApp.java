@@ -21,22 +21,26 @@ public class ShopApp {
 
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(() -> {
-            List<List<String>> list = fileManager.read();
-
-            window = new JFrame();
-            window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            window.setTitle("Obchod (" + fileManager.getSelectedFile() + ")");
-            window.setLocationByPlatform(true);
-            window.pack();
-            window.setSize(500, 500);
-
-            itemsAdapter.loadList(Mapper.toItemModel(list));
-
-            window.setVisible(true);
-
-            createComponents();
-            panel();
+            createMainWindow();
         });
+    }
+
+    private static void createMainWindow() {
+        List<List<String>> list = fileManager.read();
+
+        window = new JFrame();
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setTitle("Obchod (" + fileManager.getSelectedFile() + ")");
+        window.setLocationByPlatform(true);
+        window.pack();
+        window.setSize(500, 500);
+
+        itemsAdapter.loadList(Mapper.toItemModel(list));
+
+        window.setVisible(true);
+
+        createComponents();
+        createPanel();
     }
 
     private static void createComponents() {
@@ -59,7 +63,7 @@ public class ShopApp {
                             fileManager.saveCurrentFile(itemsAdapter.getListOfItems());
                         } catch (Exception exp) {
                             JOptionPane.showMessageDialog(mainPanel,
-                                    "Při ukládání do JSON formátu nastala: "
+                                    "Při ukládání do CSV formátu nastala: "
                                             + exp.getLocalizedMessage(), "Chyba ukládání",
                                     JOptionPane.ERROR_MESSAGE);
                         }
@@ -76,7 +80,7 @@ public class ShopApp {
                     "0 programu", JOptionPane.INFORMATION_MESSAGE);
         });
 
-        JMenuItem miUlozJson = new JMenuItem("Ulož CSV jako...");
+        JMenuItem miUlozJson = new JMenuItem("Ulož CSV");
         miUlozJson.addActionListener((e) -> {
             showSaveDialog();
         });
@@ -115,7 +119,7 @@ public class ShopApp {
             }
         } catch (Exception exp) {
             JOptionPane.showMessageDialog(mainPanel,
-                    "Při načítání do JSON formátu nastala: "
+                    "Při načítání do CSV formátu nastala: "
                             + exp.getLocalizedMessage(), "Chyba načítání",
                     JOptionPane.ERROR_MESSAGE);
         }
@@ -131,13 +135,13 @@ public class ShopApp {
             }
         } catch (Exception exp) {
             JOptionPane.showMessageDialog(mainPanel,
-                    "Při ukládání do JSON formátu nastala: "
+                    "Při ukládání do CSV formátu nastala: "
                             + exp.getLocalizedMessage(), "Chyba ukládání",
                     JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private static void panel() {
+    private static void createPanel() {
         JTable tabulkaSkladu;
 
         tabulkaSkladu = new JTable();
