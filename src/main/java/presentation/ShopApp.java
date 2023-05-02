@@ -51,12 +51,12 @@ public class ShopApp {
     }
 
     private static void createActionBar(){
-        JMenuItem miUkoncit = new JMenuItem();
-        miUkoncit.setText("Ukoncit");
-        miUkoncit.addActionListener(new ActionListener() {
+        JMenuItem exit = new JMenuItem();
+        exit.setText("Ukoncit");
+        exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                int input = JOptionPane.showConfirmDialog(null, "Do you want to save changes tp current file? " + fileManager.getSelectedFile());
+                int input = JOptionPane.showConfirmDialog(null, "Chcete uložit změny do aktuálního souboru? " + fileManager.getSelectedFile());
                 switch (input) {
                     case 0: {
                         try {
@@ -74,36 +74,36 @@ public class ShopApp {
             }
         });
 
-        JMenuItem miOProgramu = new JMenuItem("O programu");
-        miOProgramu.addActionListener((e)->{
+        JMenuItem aboutProgram = new JMenuItem("O programu");
+        aboutProgram.addActionListener((e)->{
             JOptionPane.showMessageDialog(mainPanel, "O programu\nJednoduchy simulator e-shopu.",
                     "0 programu", JOptionPane.INFORMATION_MESSAGE);
         });
 
-        JMenuItem miUlozJson = new JMenuItem("Ulož CSV");
-        miUlozJson.addActionListener((e) -> {
+        JMenuItem saveCsv = new JMenuItem("Ulož CSV");
+        saveCsv.addActionListener((e) -> {
             showSaveDialog();
         });
 
-        JMenuItem miNactiJson = new JMenuItem("Načti CSV");
-        miNactiJson.addActionListener((e) -> {
+        JMenuItem loadCsv = new JMenuItem("Načti CSV");
+        loadCsv.addActionListener((e) -> {
             showReadDialog();
         });
 
-        JMenu mnSoubor = new JMenu();
-        mnSoubor.setText("Soubor");
-        mnSoubor.add(miUlozJson);
-        mnSoubor.add(miUkoncit);
-        mnSoubor.add(miNactiJson);
+        JMenu mnFile = new JMenu();
+        mnFile.setText("Soubor");
+        mnFile.add(saveCsv);
+        mnFile.add(exit);
+        mnFile.add(loadCsv);
 
-        JMenu mnNapoveda = new JMenu("Napoveda");
-        mnNapoveda.add(miOProgramu);
+        JMenu mnHelp = new JMenu("Napoveda");
+        mnHelp.add(aboutProgram);
 
-        JMenuBar nabidka = new JMenuBar();
-        nabidka.add(mnSoubor);
-        nabidka.add(mnNapoveda);
+        JMenuBar menuBar = new JMenuBar();
+        menuBar.add(mnFile);
+        menuBar.add(mnHelp);
 
-        window.setJMenuBar(nabidka);
+        window.setJMenuBar(menuBar);
     }
 
     private static void showReadDialog() {
@@ -130,8 +130,8 @@ public class ShopApp {
             JFileChooser dialog = new JFileChooser(".");
             dialog.setFileFilter(new FileNameExtensionFilter("*.csv", "csv"));
             if (dialog.showSaveDialog(window) == JFileChooser.APPROVE_OPTION) {
-                String soubor = dialog.getSelectedFile().getPath();
-                fileManager.write(soubor + ".csv", itemsAdapter.getListOfItems());
+                String file = dialog.getSelectedFile().getPath();
+                fileManager.write(file + ".csv", itemsAdapter.getListOfItems());
             }
         } catch (Exception exp) {
             JOptionPane.showMessageDialog(mainPanel,
@@ -142,58 +142,58 @@ public class ShopApp {
     }
 
     private static void createPanel() {
-        JTable tabulkaSkladu;
+        JTable storeTable;
 
-        tabulkaSkladu = new JTable();
-        tabulkaSkladu.setModel(itemsAdapter);
-        tabulkaSkladu.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tabulkaSkladu.setFillsViewportHeight(true);
+        storeTable = new JTable();
+        storeTable.setModel(itemsAdapter);
+        storeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        storeTable.setFillsViewportHeight(true);
 
-        JScrollPane spTabulka = new JScrollPane(tabulkaSkladu);
+        JScrollPane spTable = new JScrollPane(storeTable);
 
-        JButton btPridej = new JButton("Přidat");
-        JButton btSmaz = new JButton("Smazat");
-        JButton btSmazVse = new JButton("Smazat vše");
+        JButton btInsert = new JButton("Přidat");
+        JButton btDelete = new JButton("Smazat");
+        JButton btDeleteAll = new JButton("Smazat vše");
 
-        JPanel pnTlacitka = new JPanel();
-        pnTlacitka.setLayout(new GridLayout(0, 1));
-        pnTlacitka.add(btPridej);
-        pnTlacitka.add(btSmaz);
-        pnTlacitka.add(btSmazVse);
+        JPanel pnButtons = new JPanel();
+        pnButtons.setLayout(new GridLayout(0, 1));
+        pnButtons.add(btInsert);
+        pnButtons.add( btDelete);
+        pnButtons.add(btDeleteAll);
 
-        btSmaz.setEnabled(false);
+         btDelete.setEnabled(false);
 
-        tabulkaSkladu.getSelectionModel().addListSelectionListener((e) -> {
-            int radek = tabulkaSkladu.getSelectedRow();
+        storeTable.getSelectionModel().addListSelectionListener((e) -> {
+            int radek = storeTable.getSelectedRow();
             if(radek < 0) {
-                btSmaz.setEnabled(false);
+                 btDelete.setEnabled(false);
             } else {
-                btSmaz.setEnabled(true);
+                 btDelete.setEnabled(true);
             }
         });
 
-        btPridej.addActionListener((e)-> {
+        btInsert.addActionListener((e)-> {
             itemsAdapter.addItem(new Item("-", 0, 0));
         });
 
-        btSmaz.addActionListener((e) -> {
-            int radek = tabulkaSkladu.getSelectedRow();
-            System.out.println(radek);
-            itemsAdapter.removeItem(radek);
+         btDelete.addActionListener((e) -> {
+            int line = storeTable.getSelectedRow();
+            System.out.println(line);
+            itemsAdapter.removeItem(line);
         });
 
-        btSmazVse.addActionListener((e) -> {
+        btDeleteAll.addActionListener((e) -> {
             int confrimDialog = JOptionPane.showConfirmDialog(null, "Smažete všechny položky v tabulce!\nOpravdu chcete pokračovat?", "Varování!" ,JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
             if(confrimDialog == JOptionPane.YES_OPTION) {
                 itemsAdapter.clear();
             }
         });
 
-        JPanel panelSkladu = new JPanel();
-        panelSkladu.setLayout(new BorderLayout());
-        panelSkladu.add(spTabulka, BorderLayout.CENTER);
-        panelSkladu.add(pnTlacitka, BorderLayout.SOUTH);
+        JPanel storePanel = new JPanel();
+        storePanel.setLayout(new BorderLayout());
+        storePanel.add(spTable, BorderLayout.CENTER);
+        storePanel.add(pnButtons, BorderLayout.SOUTH);
 
-        window.add(panelSkladu);
+        window.add(storePanel);
     }
 }
