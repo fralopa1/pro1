@@ -47,15 +47,15 @@ public class ItemsAdapter extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
 
-        Item zbozi = listOfItems.get(rowIndex);
+        Item product = listOfItems.get(rowIndex);
 
         switch (columnIndex) {
             case 0:
-                return zbozi.getName();
+                return product.getName();
             case 1:
-                return zbozi.getPrice();
+                return product.getPrice();
             case 2:
-                return zbozi.getCount();
+                return product.getCount();
             default:
                 throw new IllegalArgumentException("Nespravny sloupec tabulky skladu.");
         }
@@ -67,19 +67,19 @@ public class ItemsAdapter extends AbstractTableModel {
     }
 
     @Override
-    public void setValueAt(Object hodnota, int rowIndex, int columnIndex) {
-        Item zbozi = listOfItems.get(rowIndex);
+    public void setValueAt(Object value, int rowIndex, int columnIndex) {
+        Item product = listOfItems.get(rowIndex);
 
         try {
             switch (columnIndex) {
                 case NAME:
-                    zbozi.setName(hodnota.toString());
+                    product.setName(value.toString());
                     break;
                 case PRICE:
-                    zbozi.setPrice(Float.parseFloat(hodnota.toString()));
+                    product.setPrice(Float.parseFloat(value.toString()));
                     break;
                 case AMOUNT:
-                    zbozi.setCount(Integer.parseInt(hodnota.toString()));
+                    product.setCount(Integer.parseInt(value.toString()));
                     break;
                 default:
                     throw new IllegalArgumentException("Nespravny sloupec tabulky skladu.");
