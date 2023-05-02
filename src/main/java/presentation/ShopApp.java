@@ -151,13 +151,13 @@ public class ShopApp {
 
         JScrollPane spTable = new JScrollPane(storeTable);
 
-        JButton btInsert = new JButton("Přidat");
+        JButton btAdd = new JButton("Přidat");
         JButton btDelete = new JButton("Smazat");
         JButton btDeleteAll = new JButton("Smazat vše");
 
         JPanel pnButtons = new JPanel();
         pnButtons.setLayout(new GridLayout(0, 1));
-        pnButtons.add(btInsert);
+        pnButtons.add(btAdd);
         pnButtons.add( btDelete);
         pnButtons.add(btDeleteAll);
 
@@ -172,7 +172,7 @@ public class ShopApp {
             }
         });
 
-        btInsert.addActionListener((e)-> {
+        btAdd.addActionListener((e)-> {
             itemsAdapter.addItem(new Item("-", 0, 0));
         });
 
